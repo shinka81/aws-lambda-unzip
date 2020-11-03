@@ -6,8 +6,8 @@ The function extracts zip files and uploads files to the same S3 location. It sh
 
 ## Permissions
 
-You need to give following permissions:
-
+You need to give following permissions ... second statement is if objects are encrypted:
+{
 	{
 	    "Effect": "Allow",
 	    "Action": [
@@ -19,6 +19,7 @@ You need to give following permissions:
 	        "arn:aws:s3:::target-bucket"
 	    ]
 	}
+}
 
 ## Requirements
 

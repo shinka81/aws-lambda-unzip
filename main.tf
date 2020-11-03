@@ -2,7 +2,7 @@ provider "aws" {
   region = "${var.aws_region}"
 }
 
-variable "aws_region"     { default = "us-west-2" }
+variable "aws_region"     { default = "us-east-1" }
 
 variable "target_bucket"  { }
 
@@ -12,7 +12,7 @@ resource "aws_lambda_function" "unzip_lambda_lambda_function" {
   runtime          = "python3.6"
   filename         = "unzip_lambda.zip"
   function_name    = "unzip_lambda"
-  source_code_hash = "${base64sha256(file("unzip_lambda.zip"))}"
+  source_code_hash = "${filebase64("unzip_lambda.zip")}"
 
   timeout          = 900 // 15 minutes (it's maximum for lambdas)
 
@@ -73,5 +73,11 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
     lambda_function_arn = "${aws_lambda_function.unzip_lambda_lambda_function.arn}"
     events              = ["s3:ObjectCreated:*"]
     filter_suffix       = ".zip"
+  }
+
+  lambda_function {
+    lambda_function_arn = "${aws_lambda_function.unzip_lambda_lambda_function.arn}"
+    events              = ["s3:ObjectCreated:*"]
+    filter_suffix       = ".gz"
   }
 }
